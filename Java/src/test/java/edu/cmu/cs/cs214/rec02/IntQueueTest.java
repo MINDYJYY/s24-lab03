@@ -94,6 +94,40 @@ public class IntQueueTest {
     }
 
     @Test
+    public void testClear() {
+        for (int i = 0; i < testList.size(); i++) {
+            mQueue.enqueue(testList.get(i));
+        }
+        mQueue.clear();
+        assertTrue(mQueue.isEmpty());
+    }
+
+    @Test
+    public void testEnsureCapacity() {
+        List<Integer> testList = new ArrayList<>(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
+        int Part1Size = 5;
+        // move head to middle of the array (branch coverage)
+        for (int i = 0; i < Part1Size; i++) {
+            mQueue.enqueue(testList.get(i));
+        }
+        for (int i = 0; i < Part1Size; i++) {
+            mQueue.dequeue();
+        }
+        // add elements that exceeds the old capacity
+        for (int i = 0; i < testList.size(); i++) {
+            mQueue.enqueue(testList.get(i));
+        }
+        // check capacity is increased
+        assertEquals(mQueue.size(), testList.size());
+        // check each element
+        for (int i = 0; i < testList.size(); i++) {
+            assertEquals(testList.get(i), mQueue.dequeue());
+            assertEquals(testList.size() - i - 1, mQueue.size());
+        }
+        assertNull(mQueue.dequeue());
+    }
+
+    @Test
     public void testContent() throws IOException {
         // This is an example unit test
         InputStream in = new FileInputStream("src/test/resources/data.txt");
